@@ -9,6 +9,19 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Run Cleanup Script
+    - name: Clean Workspace and Cache
       shell: bash
-      run: ./cleanup.sh ${{ inputs.workspace }}
+      run: |
+        if [ -z "${{ inputs.workspace }}" ]; then
+          echo "Error: WORKSPACE_DIR is not set or empty."
+          exit 1
+        fi
+        echo "Cleaning workspace directory (${{ inputs.workspace }})"
+        sudo rm -rf "${{ inputs.workspace }}"
+        mkdir -p "${{ inputs.workspace }}"
+        xcrun simctl delete unavailable
+        rm -rf ~/Library/Developer/Xcode/DerivedData/*
+        rm -rf ~/Library/Caches/com.apple.dt.Xcode/*
+        sudo rm -rf /Applications/Xcode_*.app
+        sudo rm -rf /tmp/*
+        echo "Cleanup completed"
