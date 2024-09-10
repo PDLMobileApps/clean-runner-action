@@ -1,0 +1,14 @@
+name: 'Clean Runner Files'
+description: 'Cleans the workspace and Xcode cache for Github runners'
+author: 'Alessandro Basso'
+inputs: 
+  workspace:
+    description: 'The GitHub workspace directory'
+    required: true
+    default: '${{ github.workspace }}'
+runs:
+  using: 'composite'
+  steps:
+    - name: Run Cleanup Script
+      shell: bash
+      run: ./cleanup.sh
