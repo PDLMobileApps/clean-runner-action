@@ -11,4 +11,4 @@ runs:
   steps:
     - name: Run Cleanup Script
       shell: bash
-      run: ./cleanup.sh
+      run: ./cleanup.sh ${{ inputs.workspace }}
