@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-latest
     steps:  
         - name: Clean Runner Files
-            uses: your-username/clean-runner-action@main
+            uses: PDLMobileApps/clean-runner-action@main
             with:
             workspace: ${{ github.workspace }}
 
