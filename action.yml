@@ -1,5 +1,5 @@
-name: 'Clean Runner Files'
-description: 'Cleans the workspace and Xcode cache for Github runners'
+name: 'Clean Runner Environment'
+description: 'Cleans workspace, Xcode cache/derived data, simulators and Xcode installations for Github runners'
 author: 'Alessandro Basso'
 inputs: 
   workspace:
@@ -12,16 +12,21 @@ runs:
     - name: Clean Workspace and Cache
       shell: bash
       run: |
-        if [ -z "${{ inputs.workspace }}" ]; then
-          echo "Error: WORKSPACE_DIR is not set or empty."
-          exit 1
-        fi
         echo "Cleaning workspace directory (${{ inputs.workspace }})"
         sudo rm -rf "${{ inputs.workspace }}"
         mkdir -p "${{ inputs.workspace }}"
+
+        echo "Cleaning simulators"
         xcrun simctl delete unavailable
+
+        echo "Cleaning Xcode cache and derived data"
         rm -rf ~/Library/Developer/Xcode/DerivedData/*
         rm -rf ~/Library/Caches/com.apple.dt.Xcode/*
+
+        echo "Cleaning Xcode installations"
         sudo rm -rf /Applications/Xcode_*.app
+
+        echo "Cleaning temporary files"
         sudo rm -rf /tmp/*
-        echo "Cleanup completed"
+        
+        echo "Cleanup complete!"
