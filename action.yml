@@ -26,7 +26,7 @@ runs:
         echo "Cleaning Xcode installations"
         sudo rm -rf /Applications/Xcode_*.app
 
-        echo "Cleaning temporary files"
-        sudo rm -rf /tmp/*
+        #echo "Cleaning temporary files"
+        #sudo rm -rf /tmp/*
         
         echo "Cleanup complete!"
