@@ -13,7 +13,7 @@ runs:
       shell: bash
       run: |
         echo "Cleaning workspace directory (${{ inputs.workspace }})"
-        sudo rm -rf "${{ inputs.workspace }}"
+        sudo rm -rf "${{ inputs.workspace }}" > /dev/null
         mkdir -p "${{ inputs.workspace }}"
 
         echo "Cleaning simulators"
@@ -24,9 +24,20 @@ runs:
         rm -rf ~/Library/Caches/com.apple.dt.Xcode/*
 
         echo "Cleaning Xcode installations"
-        sudo rm -rf /Applications/Xcode_*.app
+        sudo rm -rf /Applications/Xcode_16.1_beta.app
+        sudo rm -rf /Applications/Xcode_16_beta_6.app
+        sudo rm -rf /Applications/Xcode_15.1.app
+        sudo rm -rf /Applications/Xcode_15.3.app
+        sudo rm -rf /Applications/Xcode_15.4.app
+        sudo rm -rf /Applications/Xcode_15.0.1.app
+        sudo rm -rf /Applications/Xcode_14.3.1.app
+        sudo rm -rf /Applications/Xcode_14.2.app
+        sudo rm -rf /Applications/Xcode_14.1.app
 
         #echo "Cleaning temporary files"
-        #sudo rm -rf /tmp/*
+        #sudo rm -rf /tmp/* || true
         
         echo "Cleanup complete!"
+
+        echo "Disk space after cleanup:"
+        df -h
