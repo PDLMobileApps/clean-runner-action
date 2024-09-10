@@ -12,6 +12,9 @@ runs:
     - name: Clean Workspace and Cache
       shell: bash
       run: |
+        #echo "Disk space before cleanup:"
+        #df -h
+
         echo "Cleaning workspace directory (${{ inputs.workspace }})"
         sudo rm -rf "${{ inputs.workspace }}" > /dev/null
         mkdir -p "${{ inputs.workspace }}"
@@ -34,10 +37,10 @@ runs:
         sudo rm -rf /Applications/Xcode_14.2.app
         sudo rm -rf /Applications/Xcode_14.1.app
 
-        #echo "Cleaning temporary files"
-        #sudo rm -rf /tmp/* || true
+        #echo "Listing remaining Xcode versions:"
+        #find /Applications -maxdepth 1 -type d -name "Xcode*.app" -exec basename {} \;
         
         echo "Cleanup complete!"
 
-        echo "Disk space after cleanup:"
-        df -h
+        #echo "Disk space after cleanup:"
+        #df -h
