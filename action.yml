@@ -1,23 +1,33 @@
 name: 'Clean Runner Environment'
-description: 'Cleans workspace, Xcode cache/derived data, simulators and Xcode installations for Github runners'
+description: 'Cleans workspace, Xcode cache/derived data, simulators, and Xcode installations for GitHub runners'
 author: 'Alessandro Basso'
 inputs: 
   workspace:
-    description: 'The GitHub workspace directory'
-    required: true
+    description: 'The GitHub workspace directory to clean'
+    required: false
     default: '${{ github.workspace }}'
+  xcode_version:
+    description: 'The Xcode version to keep installed'
+    required: false
+    default: '15.2'
 runs:
   using: 'composite'
   steps:
     - name: Clean Workspace and Cache
       shell: bash
       run: |
+        # Uncomment to check disk space before cleanup
         #echo "Disk space before cleanup:"
         #df -h
 
-        echo "Cleaning workspace directory (${{ inputs.workspace }})"
-        sudo rm -rf "${{ inputs.workspace }}" > /dev/null
-        mkdir -p "${{ inputs.workspace }}"
+        # Check if workspace directory is set before cleaning
+        if [ -n "${{ inputs.workspace }}" ]; then
+          echo "Cleaning workspace directory (${{ inputs.workspace }})"
+          sudo rm -rf "${{ inputs.workspace }}" > /dev/null 2>&1
+          mkdir -p "${{ inputs.workspace }}"
+        else
+          echo "Workspace directory is not set. Skipping workspace cleanup."
+        fi
 
         echo "Cleaning simulators"
         xcrun simctl delete unavailable
@@ -26,21 +36,20 @@ runs:
         rm -rf ~/Library/Developer/Xcode/DerivedData/*
         rm -rf ~/Library/Caches/com.apple.dt.Xcode/*
 
-        echo "Cleaning Xcode installations"
-        sudo rm -rf /Applications/Xcode_16.1_beta.app
-        sudo rm -rf /Applications/Xcode_16_beta_6.app
-        sudo rm -rf /Applications/Xcode_15.1.app
-        sudo rm -rf /Applications/Xcode_15.3.app
-        sudo rm -rf /Applications/Xcode_15.4.app
-        sudo rm -rf /Applications/Xcode_15.0.1.app
-        sudo rm -rf /Applications/Xcode_14.3.1.app
-        sudo rm -rf /Applications/Xcode_14.2.app
-        sudo rm -rf /Applications/Xcode_14.1.app
-
-        #echo "Listing remaining Xcode versions:"
+        # Uncomment to list Xcode versions before cleanup
+        #echo "Listing Xcode versions before cleanup:"
         #find /Applications -maxdepth 1 -type d -name "Xcode*.app" -exec basename {} \;
-        
+
+        echo "Cleaning Xcode installations except Xcode_${{ inputs.xcode_version }}.app"
+        for xcode in /Applications/Xcode*.app; do
+          if [[ "$xcode" != "/Applications/Xcode_${{ inputs.xcode_version }}.app" ]]; then
+            echo " - Removing $xcode"
+            sudo rm -rf "$xcode"
+          fi
+        done
+
         echo "Cleanup complete!"
 
+        # Uncomment to check disk space after cleanup
         #echo "Disk space after cleanup:"
         #df -h
