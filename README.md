@@ -1,9 +1,7 @@
 # clean-runner-action
 Cleans the workspace and Xcode cache for Github runners
 
-Use the Action in Your Workflow
-
-Here’s an example of how you can use this action:
+Here is an example of how you can use this action in your workflow:
 
 ```
 name: Clean Runner Files Workflow
