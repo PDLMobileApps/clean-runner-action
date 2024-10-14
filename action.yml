@@ -6,10 +6,10 @@ inputs:
     description: 'The GitHub workspace directory to clean'
     required: false
     default: '${{ github.workspace }}'
-  xcode_version:
-    description: 'The Xcode version to keep installed'
-    required: false
-    default: '15.2'
+  #xcode_version:
+  #  description: 'The Xcode version to keep installed'
+  #  required: false
+  #  default: '15.2'
 runs:
   using: 'composite'
   steps:
@@ -29,24 +29,24 @@ runs:
           echo "Workspace directory is not set. Skipping workspace cleanup."
         fi
 
-        echo "Cleaning simulators"
-        xcrun simctl delete unavailable
+        #echo "Cleaning simulators"
+        #xcrun simctl delete unavailable
 
-        echo "Cleaning Xcode cache and derived data"
-        rm -rf ~/Library/Developer/Xcode/DerivedData/*
-        rm -rf ~/Library/Caches/com.apple.dt.Xcode/*
+        #echo "Cleaning Xcode cache and derived data"
+        #rm -rf ~/Library/Developer/Xcode/DerivedData/*
+        #rm -rf ~/Library/Caches/com.apple.dt.Xcode/*
 
         # Uncomment to list Xcode versions before cleanup
         #echo "Listing Xcode versions before cleanup:"
         #find /Applications -maxdepth 1 -type d -name "Xcode*.app" -exec basename {} \;
 
-        echo "Cleaning Xcode installations except Xcode_${{ inputs.xcode_version }}.app"
-        for xcode in /Applications/Xcode*.app; do
-          if [[ "$xcode" != "/Applications/Xcode_${{ inputs.xcode_version }}.app" ]]; then
-            echo " - Removing $xcode"
-            sudo rm -rf "$xcode"
-          fi
-        done
+        #echo "Cleaning Xcode installations except Xcode_${{ inputs.xcode_version }}.app"
+        #for xcode in /Applications/Xcode*.app; do
+        #  if [[ "$xcode" != "/Applications/Xcode_${{ inputs.xcode_version }}.app" ]]; then
+        #    echo " - Removing $xcode"
+        #    sudo rm -rf "$xcode"
+        #  fi
+        #done
 
         echo "Cleanup complete!"
 
