@@ -23,8 +23,7 @@ runs:
         # Check if workspace directory is set before cleaning
         if [ -n "${{ inputs.workspace }}" ]; then
           echo "Cleaning workspace directory (${{ inputs.workspace }})"
-          sudo rm -rf "${{ inputs.workspace }}" > /dev/null 2>&1
-          mkdir -p "${{ inputs.workspace }}"
+          rm -rf "${{ inputs.workspace }}/*" > /dev/null 2>&1
         else
           echo "Workspace directory is not set. Skipping workspace cleanup."
         fi
